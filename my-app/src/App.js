@@ -21,7 +21,15 @@ function App() {
     const url = showSignUp
       ? 'http://localhost:9000/api/user/signup'
       : 'http://localhost:9000/api/user/login';
-
+    const userData = {
+      userId: userId,
+      userNickname: nickname,
+      userName: name,
+      userPassword: password,
+      userBirthday: birthday,
+      userEmail: email,
+      };
+      
     const body = showSignUp
       ? JSON.stringify({ userId, nickname, name, password, birthday, email })
       : JSON.stringify({ email, password });
