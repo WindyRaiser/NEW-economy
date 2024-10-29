@@ -5,11 +5,11 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [userId, setUserId] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [birthday, setBirthday] = useState('');
-  const [email, setEmail] = useState('');
+  const [userNickname, setUserNickname] = useState('');
+  const [userName, setUserName] = useState(''); // 새로 추가된 유저 이름 상태
+  const [userPassword, setUserPassword] = useState('');
+  const [userBirthday, setUserBirthday] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,10 +21,10 @@ function App() {
     const url = showSignUp
       ? 'http://localhost:9000/api/user/signup'
       : 'http://localhost:9000/api/user/login';
-    
+
     const body = showSignUp
-      ? JSON.stringify({ userId, nickname, name, password, birthday, email })
-      : JSON.stringify({ email, password });
+      ? JSON.stringify({ userId, userNickname, userName, userPassword, userBirthday, userEmail })
+      : JSON.stringify({ userId, userPassword });
 
     try {
       const response = await fetch(url, {
@@ -55,11 +55,11 @@ function App() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserId('');
-    setNickname('');
-    setName('');
-    setPassword('');
-    setBirthday('');
-    setEmail('');
+    setUserNickname('');
+    setUserName('');
+    setUserPassword('');
+    setUserBirthday('');
+    setUserEmail('');
     // 여기에서 토큰을 제거하거나 다른 필요한 로그아웃 작업을 수행할 수 있습니다.
   };
 
@@ -77,69 +77,69 @@ function App() {
     <div className="container">
       <h1>{showSignUp ? '회원가입' : '로그인'}</h1>
       <form onSubmit={handleSubmit}>
-        {showSignUp ? (
+        <div className="input-group">
+          <label htmlFor="userId">아이디</label>
+          <input
+            id="userId"
+            type="text"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            required
+          />
+        </div>
+        {showSignUp && (
           <>
             <div className="input-group">
-              <label htmlFor="userId">아이디</label>
+              <label htmlFor="userNickname">닉네임</label>
               <input
-                id="userId"
+                id="userNickname"
                 type="text"
-                value={userId}
-                onChange={(e) => setUserId(e.target.value)}
+                value={userNickname}
+                onChange={(e) => setUserNickname(e.target.value)}
                 required
               />
             </div>
             <div className="input-group">
-              <label htmlFor="nickname">닉네임</label>
+              <label htmlFor="userName">이름</label>
               <input
-                id="nickname"
+                id="userName"
                 type="text"
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
                 required
               />
             </div>
             <div className="input-group">
-              <label htmlFor="name">이름</label>
+              <label htmlFor="userEmail">이메일</label>
               <input
-                id="name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                id="userEmail"
+                type="email"
+                value={userEmail}
+                onChange={(e) => setUserEmail(e.target.value)}
                 required
               />
             </div>
             <div className="input-group">
-              <label htmlFor="birthday">생년월일 (YYYYMMDD)</label>
+              <label htmlFor="userBirthday">생년월일 (YYYYMMDD)</label>
               <input
-                id="birthday"
+                id="userBirthday"
                 type="text"
-                value={birthday}
-                onChange={(e) => setBirthday(e.target.value)}
+                value={userBirthday}
+                onChange={(e) => setUserBirthday(e.target.value)}
                 pattern="\d{8}"
                 maxLength="8"
                 required
               />
             </div>
           </>
-        ) : null}
+        )}
         <div className="input-group">
-          <label htmlFor="email">이메일</label>
+          <label htmlFor="userPassword">비밀번호</label>
           <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="input-group">
-          <label htmlFor="password">비밀번호</label>
-          <input
-            id="password"
+            id="userPassword"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={userPassword}
+            onChange={(e) => setUserPassword(e.target.value)}
             required
           />
         </div>
