@@ -6,16 +6,18 @@ function App() {
   const [showSignUp, setShowSignUp] = useState(false);
   const [userId, setUserId] = useState('');
   const [userNickname, setUserNickname] = useState('');
-  const [userName, setUserName] = useState(''); // 새로 추가된 유저 이름 상태
+  const [userName, setUserName] = useState(''); 
   const [userPassword, setUserPassword] = useState('');
   const [userBirthday, setUserBirthday] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState(''); //성공메시지 추가
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccessMessage(''); // 성공 메시지 초기화
     setIsLoading(true);
 
     const url = showSignUp
@@ -23,16 +25,16 @@ function App() {
       : '/api/user/login';
     const userData = {
       userId: userId,
-      userNickname: nickname,
-      userName: name,
-      userPassword: password,
-      userBirthday: birthday,
-      userEmail: email,
-      };
-      
+      userNickname: userNickname,
+      userName: userName,
+      userPassword: userPassword,
+      userBirthday: userBirthday,
+      userEmail: userEmail,
+    };
+
     const body = showSignUp
       ? JSON.stringify(userData)
-      : JSON.stringify({ email, password });
+      : JSON.stringify({ email: userEmail, password: userPassword });
 
     try {
       const response = await fetch(url, {
@@ -49,9 +51,15 @@ function App() {
         throw new Error(data.message || '서버 오류가 발생했습니다.');
       }
 
-      console.log(showSignUp ? '회원가입 성공' : '로그인 성공', data);
-      setIsLoggedIn(true);
-      // 여기에서 토큰을 저장하거나 다른 필요한 작업을 수행할 수 있습니다.
+      if (showSignUp) {
+        setSuccessMessage('회원가입 성공! 로그인 화면으로 돌아갑니다.'); // 성공 메시지 설정
+        setTimeout(() => {
+          setShowSignUp(false); // 로그인 화면으로 전환
+        }, 2000); // 화면으로
+      } else {
+        console.log('로그인 성공', data);
+        setIsLoggedIn(true);
+      }
     } catch (error) {
       console.error('에러:', error);
       setError(error.message || '처리 중 오류가 발생했습니다. 다시 시도해 주세요.');
@@ -68,7 +76,6 @@ function App() {
     setUserPassword('');
     setUserBirthday('');
     setUserEmail('');
-    // 여기에서 토큰을 제거하거나 다른 필요한 로그아웃 작업을 수행할 수 있습니다.
   };
 
   if (isLoggedIn) {
@@ -156,6 +163,7 @@ function App() {
         </button>
       </form>
       {error && <p className="error">{error}</p>}
+      {successMessage && <p className="success">{successMessage}</p>} {/* 성공 메시지 추가 */}
       <p className="switch-text">
         {showSignUp ? '이미 계정이 있으신가요? ' : '계정이 없으신가요? '}
         <button className="link-btn" onClick={() => setShowSignUp(!showSignUp)}>
