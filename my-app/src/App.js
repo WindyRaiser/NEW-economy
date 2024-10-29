@@ -19,12 +19,20 @@ function App() {
     setIsLoading(true);
 
     const url = showSignUp
-      ? 'http://localhost:9000/api/user/signup'
-      : 'http://localhost:9000/api/user/login';
-
+      ? '/api/user/signup'
+      : '/api/user/login';
+    const userData = {
+      userId: userId,
+      userNickname: nickname,
+      userName: name,
+      userPassword: password,
+      userBirthday: birthday,
+      userEmail: email,
+      };
+      
     const body = showSignUp
-      ? JSON.stringify({ userId, userNickname, userName, userPassword, userBirthday, userEmail })
-      : JSON.stringify({ userId, userPassword });
+      ? JSON.stringify(userData)
+      : JSON.stringify({ email, password });
 
     try {
       const response = await fetch(url, {
